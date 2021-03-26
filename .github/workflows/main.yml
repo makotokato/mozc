@@ -19,5 +19,7 @@ jobs:
         echo "$GITHUB_WORKSPACE/src/third_party/depot_tools" >> $GITHUB_PATH
     - name: build
       run: |
+        cd src
         python build_mozc.py gyp --target_platform=Linux
         python build_mozc.py build -c Release package
+        cd ..
