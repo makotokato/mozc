@@ -63,12 +63,9 @@ bool IsMozcToolAvailable() {
   return FileUtil::FileExists(SystemUtil::GetToolPath());
 }
 
-bool GetDisabled(IBusEngine *engine) {
+bool GetDisabled(IBusEngine *engine, guint purpose) {
   bool disabled = false;
 #if defined(MOZC_ENABLE_IBUS_INPUT_PURPOSE)
-  guint purpose = IBUS_INPUT_PURPOSE_FREE_FORM;
-  guint hints = IBUS_INPUT_HINT_NONE;
-  ibus_engine_get_content_type(engine, &purpose, &hints);
   disabled = (purpose == IBUS_INPUT_PURPOSE_PASSWORD ||
               purpose == IBUS_INPUT_PURPOSE_PIN);
 #endif  // MOZC_ENABLE_IBUS_INPUT_PURPOSE
@@ -219,7 +216,15 @@ void PropertyHandler::ResetContentType(IBusEngine *engine) {
 }
 
 void PropertyHandler::UpdateContentType(IBusEngine *engine) {
-  UpdateContentTypeImpl(engine, GetDisabled(engine));
+  guint purpose = 0;
+  guint hints = 0;
+#if defined(MOZC_ENABLE_IBUS_INPUT_PURPOSE)
+  guint purpose = IBUS_INPUT_PURPOSE_FREE_FORM;
+  guint hints = IBUS_INPUT_HINT_NONE;
+  ibus_engine_get_content_type(engine, &purpose, &hints);
+  engine.SetIncognitoMode(hint == IBUS_INPUT_HINT_PRIVATE);
+#endif
+  UpdateContentTypeImpl(engine, GetDisabled(engine, purpose));
 }
 
 // TODO(nona): do not use kMozcEngine*** directory.

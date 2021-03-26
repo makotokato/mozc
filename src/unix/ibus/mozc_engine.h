@@ -90,6 +90,7 @@ class MozcEngine : public EngineInterface {
   void SetCapabilities(IBusEngine *engine, guint capabilities);
   void SetCursorLocation(IBusEngine *engine, gint x, gint y, gint w, gint h);
   void SetContentType(IBusEngine *engine, guint purpose, guint hints);
+  void SetIncognitoMode(bool incognito);
 
   // Returns the GType which this class represents.
   static GType GetType();

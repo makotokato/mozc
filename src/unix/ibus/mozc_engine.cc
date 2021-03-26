@@ -676,5 +676,14 @@ CandidateWindowHandlerInterface *MozcEngine::GetCandidateWindowHandler(
 #endif  // not ENABLE_GTK_RENDERER
 }
 
+void MozcEngine::SetIncognitoMode(bool incognito) {
+  config::Config config;
+  if (!client_->GetConfig(&config)) {
+    LOG(ERROR) << "GetConfig failed";
+    return;
+  }
+  config.set_incogito_mode(incognito);
+}
+
 }  // namespace ibus
 }  // namespace mozc
